@@ -83,11 +83,12 @@ class UserController extends Controller
         ]);
 
         $code = (int)$request->code;
+
         $userv = EmailVerification::where(['user_id' => Auth::user()->id])->first();
-        $userv = (int)$userv->code;
 
-        if ($userv == $code) {
+        if ((int)$userv->code == $code) {
 
+            $userv->delete();
             $user = User::where('id',Auth::user()->id);
             
             $user->update([
