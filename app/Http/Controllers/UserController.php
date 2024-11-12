@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Mail\SendMail;
+use App\Models\EmailVerification;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use PhpParser\Node\Expr\FuncCall;
 
@@ -17,7 +19,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('table',['users' => $users]);
+        return view('table', ['users' => $users]);
     }
 
     /**
@@ -70,16 +72,43 @@ class UserController extends Controller
 
     public function verification()
     {
-        return view('auth.verify-email');
+        return view('verify-email');
     }
 
-    public function send(Request $request, User $user){
-        $data = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'text' => 'required',
+    public function verify(Request $request)
+    {
+
+        $code = $request->validate([
+            'code' => 'required|integer'
         ]);
-        Mail::to($user->email)->send(new SendMail($data));
+
+        $code = (int)$request->code;
+        $userv = EmailVerification::where(['user_id' => Auth::user()->id])->first();
+        $userv = (int)$userv->code;
+
+        if ($userv == $code) {
+
+            $user = User::where('id',Auth::user()->id);
+            
+            $user->update([
+                'email_verified_at' => now()
+            ]);
+            
+            return redirect()->route('dashboard');
+        } else {
+
+            return back();
+        }
+    }
+
+
+
+    public function send(Request $request, User $user)
+    {
+        $data = $request->validate([
+            'code' => 'required'
+        ]);
+        Mail::to($user->email)->send(new SendMail(rand(10000, 100000)));
         return back();
     }
 }

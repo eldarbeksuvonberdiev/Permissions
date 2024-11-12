@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SendMail;
+use App\Models\EmailVerification;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -42,9 +45,28 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-
+        
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        $code = rand(10000, 100000);
+
+        $userverify = EmailVerification::where(['user_id' => Auth::user()->id])->first();
+        
+        if (!$userverify) {
+
+            EmailVerification::create([
+                'user_id' => $user->id,
+                'code' => $code
+            ]);
+        } else {
+
+            $userverify->update([
+                'code' => $code
+            ]);
+        }
+
+        Mail::to($user->email)->send(new SendMail($code));
+
+        return redirect(route('email.verification'));
     }
 }
