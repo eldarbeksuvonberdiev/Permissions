@@ -68,6 +68,11 @@ class UserController extends Controller
         //
     }
 
+    public function verification()
+    {
+        return view('auth.verify-email');
+    }
+
     public function send(Request $request, User $user){
         $data = $request->validate([
             'title' => 'required',

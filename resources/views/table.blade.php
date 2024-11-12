@@ -12,13 +12,26 @@
 <body>
     <div class="row mt-5">
         <div class="col-10 offset-1">
+            <h2>Users table</h2>
+            <a href="{{ route('dashboard') }}" class="btn btn-primary mt-3 mb-3">Back</a>
+            @can('create')
+                <a href="{{ route('create') }}" class="btn btn-primary mt-3 mb-3">Create</a>
+            @endcan
             <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
                         <th scope="col">email</th>
-                        <th scope="col">Handle</th>
+                        @can('read')
+                            <th scope="col">Show</th>
+                        @endcan
+                        @can('update')
+                            <th scope="col">Edit</th>
+                        @endcan
+                        @can('delete')
+                            <th scope="col">Delete</th>
+                        @endcan
                     </tr>
                 </thead>
                 <tbody>
@@ -27,47 +40,21 @@
                             <th>{{ $user->id }}</th>
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
-                            <td>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#mail{{ $user->id }}">
-                                    Send Email
-                                </button>
-
-                                <div class="modal fade" id="mail{{ $user->id }}" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Email content</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form action="{{ route('send.mail',$user->id) }}" method="post">
-                                                    @csrf
-                                                    <div class="mb-3">
-                                                        <label for="title" class="form-label">Title</label>
-                                                        <input type="text" class="form-control" id="title" name="title" placeholder="Title">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="description" class="form-label">Description</label>
-                                                        <input type="text" class="form-control" id="description" name="description" placeholder="Title">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="text"  class="form-label">Text</label>
-                                                        <textarea class="form-control" id="text" name="text" rows="3"></textarea>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                          <button type="button" class="btn btn-secondary"
-                                                              data-bs-dismiss="modal">Close</button>
-                                                          <button type="submit" class="btn btn-primary">Save changes</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
+                            @can('read')
+                                <td>
+                                    <a href="{{ route('read') }}" class="btn btn-primary mt-3 mb-3">Show</a>
+                                </td>
+                            @endcan
+                            @can('update')
+                                <td>
+                                    <a href="{{ route('update') }}" class="btn btn-primary mt-3 mb-3">Edit</a>
+                                </td>
+                            @endcan
+                            @can('delete')
+                                <td>
+                                    <a href="{{ route('delete') }}" class="btn btn-primary mt-3 mb-3">Delete</a>
+                                </td>
+                            @endcan
                         </tr>
                     @endforeach
                 </tbody>
