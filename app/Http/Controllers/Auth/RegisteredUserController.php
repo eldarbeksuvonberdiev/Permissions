@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\SendMail;
+use App\Jobs\SendEmail;
 use App\Models\EmailVerification;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -58,15 +58,10 @@ class RegisteredUserController extends Controller
                 'user_id' => $user->id,
                 'code' => $code
             ]);
-        } else {
-
-            $userverify->update([
-                'code' => $code
-            ]);
         }
 
-        Mail::to($user->email)->send(new SendMail($code));
+        SendEmail::dispatch(Auth::user()->email,$code);
 
-        return redirect(route('email.verification'));
+        return redirect()->route('email.verification');
     }
 }
