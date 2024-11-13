@@ -14,9 +14,7 @@
         <div class="col-10 offset-1">
             <h2>Users table</h2>
             <a href="{{ route('dashboard') }}" class="btn btn-primary mt-3 mb-3">Back</a>
-            @can('create')
-                <a href="{{ route('create') }}" class="btn btn-primary mt-3 mb-3">Create</a>
-            @endcan
+            <a href="{{ route('create') }}" class="btn btn-primary mt-3 mb-3">Create</a>
             <table class="table">
                 <thead>
                     <tr>

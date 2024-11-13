@@ -58,9 +58,9 @@ class RegisteredUserController extends Controller
                 'user_id' => $user->id,
                 'code' => $code
             ]);
+            SendEmail::dispatch(Auth::user()->email,$code);
         }
 
-        SendEmail::dispatch(Auth::user()->email,$code);
 
         return redirect()->route('email.verification');
     }
