@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Mail\SendMail;
+use App\Models\Car;
 use App\Models\EmailVerification;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = Car::orderBy('id','desc')->paginate(15);
         return view('table', ['users' => $users]);
     }
 
