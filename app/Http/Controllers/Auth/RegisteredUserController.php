@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\SendEmail;
+use App\Jobs\SendSMS;
 use App\Models\EmailVerification;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -70,8 +71,8 @@ class RegisteredUserController extends Controller
                 'user_id' => $user->id,
                 'code' => $code
             ]);
+            SendSMS::dispatch($token,$data);
             SendEmail::dispatch(Auth::user()->email,$code);
-            $responce = Http::withToken($token)->post('notify.eskiz.uz/api/message/sms/send',$data);
         }
 
 
