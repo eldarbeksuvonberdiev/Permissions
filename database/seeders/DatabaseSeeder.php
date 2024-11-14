@@ -19,35 +19,43 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        $user1 = User::create([
-            'name' => 'admin',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make(123456789),
-        ]);
-
-        $user2 = User::create([
-            'name' => 'user',
-            'email' => 'user@gmail.com',
-            'password' => Hash::make(123456789),
-        ]);
-
-        $user3 = User::create([
-            'name' => 'user',
-            'email' => 'user1@gmail.com',
-            'password' => Hash::make(123456789),
-        ]);
-
-        $user4 = User::create([
-            'name' => 'user',
-            'email' => 'user2@gmail.com',
-            'password' => Hash::make(123456789),
-        ]);
-
-        $user5 = User::create([
-            'name' => 'user',
-            'email' => 'user3@gmail.com',
-            'password' => Hash::make(123456789),
-        ]);
+        for ($i=0; $i < 10; $i++) { 
+            
+            $user1 = User::create([
+                'name' => 'admin',
+                'email' => 'admin'.$i.'@gmail.com',
+                'phone' => fake()->phoneNumber(),
+                'password' => Hash::make(123456789),
+            ]);
+    
+            $user2 = User::create([
+                'name' => 'user',
+                'email' => 'user'.$i.'@gmail.com',
+                'phone' => fake()->phoneNumber(),
+                'password' => Hash::make(123456789),
+            ]);
+    
+            $user3 = User::create([
+                'name' => 'user',
+                'email' => 'user1'.$i.'@gmail.com',
+                'phone' => fake()->phoneNumber(),
+                'password' => Hash::make(123456789),
+            ]);
+    
+            $user4 = User::create([
+                'name' => 'user',
+                'email' => 'user2'.$i.'@gmail.com',
+                'phone' => fake()->phoneNumber(),
+                'password' => Hash::make(123456789),
+            ]);
+    
+            $user5 = User::create([
+                'name' => 'user',
+                'email' => 'user3'.$i.'@gmail.com',
+                'phone' => fake()->phoneNumber(),
+                'password' => Hash::make(123456789),
+            ]);
+        }
 
         $role1 = Role::create(['name' => 'admin']);
         $role2 = Role::create(['name' => 'create']);
